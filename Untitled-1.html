@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>logIn</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            
+            background: url('abc.jpg') no-repeat center center fixed;
+            background-size: cover; 
+            font-family: Arial, sans-serif;
+        }
+        
+        .sun {
+            position: absolute;
+            top: 83px;
+            left: 2%;
+            width: 120px;
+            height: 120px;
+            background: yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 255, 0, 0.8);
+            
+        }
+
+        .tower {
+            position: absolute;
+            bottom: 0;
+            top: 257px;
+            width: 140px;
+            height: 320px;
+            background: linear-gradient(to bottom, #999, #666);
+            border: 3px solid #444;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            
+            border-radius: 5px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tower1 {
+            left: 10vw;
+        }
+
+        .tower2 {
+            left: 30vw;
+        }
+
+        .door {
+            position: absolute;
+            bottom: 0;
+            width: 50px;
+            height: 70px;
+            background: #444;
+            border: 3px solid #222;
+            border-radius: 3px;
+        }
+
+        .window {
+            width: 20px;
+            height: 20px;
+            margin: 5px;
+            background: #ddd;
+            border-radius: 2px;
+            border: 1px solid #aaa;
+        }
+
+        .windows {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 5px;
+            padding: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .fire {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(255,69,0,1) 10%, rgba(255,140,0,1) 40%, rgba(255,215,0,1) 60%, rgba(255,69,0,0) 90%);
+            border-radius: 50%;
+            opacity: 0.9;
+            animation: fireFlame 0.5s infinite alternate;
+            filter: blur(3px);
+        }
+
+        .fire::before, .fire::after {
+            content: "";
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(255,140,0,0.8) 10%, rgba(255,69,0,0.6) 60%, rgba(255,69,0,0) 90%);
+            border-radius: 50%;
+            opacity: 0.7;
+            filter: blur(8px);
+        }
+
+        .fire::before {
+            top: -20px;
+            left: 10px;
+            animation: fireFlameSmall 1s infinite alternate;
+        }
+
+        .fire::after {
+            top: 15px;
+            left: -10px;
+            animation: fireFlameSmall 1.2s infinite alternate;
+        }
+
+        @keyframes fireFlame {
+            0% { transform: scale(1) translateY(0px); opacity: 1; }
+            100% { transform: scale(1.2) translateY(-10px); opacity: 0.7; }
+        }
+
+        @keyframes fireFlameSmall {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.2); opacity: 0.4; }
+        }
+
+        
+        .fire1 { top: -40px; left: 50%; }
+        .fire2 { top: 50px; left: 10px; }
+        .fire3 { top: 100px; left: 70px; }
+        .fire4 { top: 200px; left: 30px; }
+
+        
+        .helicopter {
+            position: absolute;
+            width: 140px;
+            height: 60px;
+            top: 10vh;
+            left: 10vw;
+            animation: fly 8s infinite linear alternate;
+        }
+
+        .bdy {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            background: linear-gradient(to right, #B22222, #8B0000);
+            border-radius: 25px;
+        }
+
+        .glass {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background: lightblue;
+            border-radius: 15px;
+            top: 7px;
+            left: 10px;
+            border: 2px solid white;
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 255, 0.3);
+        }
+
+        .tail {
+            position: absolute;
+            width: 60px;
+            height: 12px;
+            background: linear-gradient(to right, #B22222, #8B0000);
+            top: 28px;
+            left: 110px;
+            border-radius: 25px;
+        }
+
+        .propeller {
+            position: absolute;
+            width: 140px;
+            height: 10px;
+            background-color: gray;
+            top: -12px;
+            left: 0;
+            border-radius: 25px;
+            animation: spin 0.3s infinite linear;
+        }
+
+        .water-tank {
+            position: absolute;
+            width: 50px;
+            height: 30px;
+            background: blue;
+            bottom: -35px;
+            left: 35px;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+
+        .water-drop {
+            position: absolute;
+            width: 10px;
+            height: 15px;
+            background: rgba(0, 0, 255, 0.7);
+            border-radius: 50%;
+            animation: waterflow 2s infinite;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100px;
+        }
+
+        @keyframes waterflow {
+            0% { top: 90px ;transform: translateX(-50%) translateY(0px); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(150px); opacity: 0; }
+        }
+
+        .tail-propeller {
+            position: absolute;
+            width: 30px;
+            height: 5px;
+            background-color: gray;
+            top: 20px;
+            left: 150px;
+            border-radius: 25px;
+            animation: spin 0.3s infinite linear;
+        }
+
+        .Firedept-write {
+            position: absolute;
+            top: 20px;
+            left: 55px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .feet {
+            position: absolute;
+            width: 80px;
+            height: 10px;
+            background-color: rgb(44, 45, 44);
+            bottom: -20px;
+            left: 20px;
+            border-radius: 5px;
+        }
+
+        .feet::before, .feet::after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background-color: rgb(44, 45, 44);
+            top: -15px;
+            border-radius: 5px;
+        }
+
+        .feet::before {
+            left: 15px;
+        }
+
+        .feet::after {
+            right: 15px;
+        }
+
+
+        @keyframes fly {
+            0% { transform: translate(5vw, 5vh) rotate(0deg); }
+            25% { transform: translate(50vw, 15vh) rotate(5deg); }
+            50% { transform: translate(70vw, 40vh) rotate(-5deg); }
+            75% { transform: translate(30vw, 60vh) rotate(10deg); }
+            100% { transform: translate(90vw, 20vh) rotate(0deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotateX(45deg) rotate(0deg); }
+            100% { transform: rotateX(45deg) rotate(360deg); }
+        }
+
+        .cloud {
+            position: absolute;
+            width: 150px;
+            height: 60px;
+            background-color: white;
+            border-radius: 50px;
+            opacity: 0.8;
+            animation: cloudMove 10s infinite linear;
+        }
+
+        .cloud::before, .cloud::after {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            top: -20px;
+        }
+
+        .cloud::before {
+            left: 10px;
+            top: -20px;
+        }
+
+        .cloud::after {
+            left: 60px;
+        }
+
+        @keyframes cloudMove {
+            0% { transform: translateX(-200px); }
+            100% { transform: translateX(100vw); }
+        }
+
+        .cloud:nth-child(1) { top: 3%; left: -4px; width: 160px; animation-duration: 10s; }
+        .cloud:nth-child(4) { top: 15%; left: 4px; width: 170px; animation-duration: 19s; }
+        .cloud:nth-child(5) { top: 20%; left: 2px; width: 150px; animation-duration: 11s; }
+        .cloud:nth-child(6) { top: 25%; left: 3px; width: 160px; animation-duration: 16s; }
+        .cloud:nth-child(7) { top: 30%; left: 11px; width: 190px; animation-duration: 24s; }
+        .cloud:nth-child(8) { top: 35%; left: 4px; width: 170px; animation-duration: 13s; }
+
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 90px;
+            background: radial-gradient(circle at top, #ff4d4d, #b30000);
+            border-radius: 50% 50% 45% 45%;
+            animation: balloonMove 12s infinite linear;
+            cursor: pointer;
+            text-align: center;
+            line-height: 90px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            border: 2px solid darkred;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+     
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 50px;
+            background: black;
+        }
+
+        @keyframes balloonMove {
+            0% { bottom: -100px; }
+            100% { bottom: 100vh; }
+        }
+
+        .login-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            padding: 25px;
+            background: rgba(50, 50, 50, 0.95);
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.8);
+            border-radius: 15px;
+            text-align: center;
+            color: darkred;;
+        }
+
+        .login-container h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: crimson;;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #777;
+            border-radius: 8px;
+            background: #222;
+            color: white;
+            font-size: 16px;
+        }
+
+        .login-container input::placeholder {
+            color: #888;
+        }
+
+        .login-container input[type="submit"] {
+            background: linear-gradient(to right, #600000, #300000);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .login-container input[type="submit"]:hover {
+            background: linear-gradient(to right, #008000, #004400);
+        }
+
+        #login-overlay:target {
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sun"></div>
+    <div class="tower tower1">
+        <div class="door"></div>
+        <div class="fire fire1"></div>
+        <div class="fire fire2"></div>
+        <div class="fire fire3"></div>
+        <div class="windows">
+            <div class="window"></div><div class="window"></div><div class="window"></div>
+            <div class="window"></div><div class="window"></div><div class="window"></div>
+            <div class="window"></div><div class="window"></div><div class="window"></div>
+            <div class="window"></div><div class="window"></div><div class="window"></div>
+        </div>
+    </div>
+    
+    <div class="tower tower2">
+        <div class="door"></div>
+        <div class="fire fire1"></div>
+        <div class="fire fire4"></div>
+        <div class="windows">
+            <div class="window"></div><div class="window"></div><div class="window"></div>
+            <div class="window"></div><div class="window"></div><div class="window"></div>
+            <div class="window"></div><div class="window"></div><div class="window"></div>
+            <div class="window"></div><div class="window"></div><div class="window"></div>
+        </div>
+    </div>
+    <div class="helicopter">
+        <div class="bdy"></div>
+        <div class="glass"></div>
+        <div class="tail"></div>
+        <div class="propeller"></div>
+        <div class="water-tank"></div>
+        <div class="water-drop" style="left: 50px; top: 10px;"></div>
+        <div class="tail-propeller"></div>
+        <div class="Firedept-write">Firedept</div>
+        <div class="feet"></div>
+    </div>
+
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+
+    
+
+    <a href="#login-overlay" class="balloon">Push</a>
+    <div id="login-overlay" class="login-container">
+        <h2>Login</h2>
+        <form action="/action_page.php">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    
+</body>
+</html>
