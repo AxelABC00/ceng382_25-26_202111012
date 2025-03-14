@@ -15,19 +15,18 @@
         }
         
         .sun {
-            position: absolute;
-            top: 83px;
-            left: 2%;
+            position: fixed;
+            top: 11%;
+            left: 5%;
             width: 120px;
             height: 120px;
             background: yellow;
             border-radius: 50%;
             box-shadow: 0 0 50px rgba(255, 255, 0, 0.8);
-            
         }
 
         .tower {
-            position: absolute;
+            position: fixed;
             bottom: 0;
             top: 257px;
             width: 140px;
@@ -44,11 +43,11 @@
         }
 
         .tower1 {
-            left: 10vw;
+            left: 11vw;
         }
 
         .tower2 {
-            left: 30vw;
+            left: 31vw;
         }
 
         .door {
@@ -333,7 +332,6 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-     
         .balloon::after {
             content: "";
             position: absolute;
@@ -403,11 +401,26 @@
             display: block;
             transform: translate(-50%, -50%) scale(1);
         }
-
+        
+        .clock {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+        }
+    
+     
+        
     </style>
 </head>
 <body>
     <div class="sun"></div>
+    <div class="clock" id="liveClock"></div>
     <div class="tower tower1">
         <div class="door"></div>
         <div class="fire fire1"></div>
@@ -456,7 +469,7 @@
     <a href="#login-overlay" class="balloon">Push</a>
     <div id="login-overlay" class="login-container">
         <h2>Login</h2>
-        <form action="/action_page.php">
+        <form id="loginForm">
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username" required><br>
             <label for="password">Password:</label><br>
@@ -464,7 +477,33 @@
             <input type="submit" value="Submit">
         </form>
     </div>
+    <script>
+        function updateClock() {
+            const clockElement = document.getElementById("liveClock");
+            if (clockElement) {
+                const now = new Date();
+                clockElement.textContent = now.toLocaleTimeString();
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-    
+        document.addEventListener("keydown", (event) => {
+            if (event.key.toLowerCase() === "h") {
+                const loginOverlay = document.getElementById("login-overlay");
+                loginOverlay.style.display = loginOverlay.style.display === "none" ? "block" : "none";
+            }
+        });
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault(); 
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        
+        console.log("Login - User name:", username, "passwordd:", password);
+
+        
+        this.reset(); 
+    });
+    </script>
 </body>
 </html>
