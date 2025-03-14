@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>logIn</title>
+    <title>Login Page</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
-            
             background: url('abc.jpg') no-repeat center center fixed;
-            background-size: cover; 
+            background-size: cover;
             font-family: Arial, sans-serif;
         }
-        
+
         .sun {
             position: fixed;
             top: 11%;
@@ -313,7 +312,7 @@
 
         .balloon {
             position: absolute;
-            bottom: -100px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             width: 70px;
@@ -349,7 +348,7 @@
         }
 
         .login-container {
-            display: none;
+            display: none; 
             position: fixed;
             top: 50%;
             left: 50%;
@@ -360,13 +359,13 @@
             box-shadow: 0 0 15px rgba(139, 0, 0, 0.8);
             border-radius: 15px;
             text-align: center;
-            color: darkred;;
+            color: darkred;
         }
 
         .login-container h2 {
             margin-bottom: 15px;
             font-size: 24px;
-            color: crimson;;
+            color: crimson;
         }
 
         .login-container input {
@@ -378,10 +377,6 @@
             background: #222;
             color: white;
             font-size: 16px;
-        }
-
-        .login-container input::placeholder {
-            color: #888;
         }
 
         .login-container input[type="submit"] {
@@ -397,11 +392,10 @@
             background: linear-gradient(to right, #008000, #004400);
         }
 
-        #login-overlay:target {
-            display: block;
-            transform: translate(-50%, -50%) scale(1);
+        .error-message {
+            color: red;
+            margin-top: 10px;
         }
-        
         .clock {
             position: fixed;
             top: 10px;
@@ -413,12 +407,13 @@
             padding: 10px;
             border-radius: 8px;
         }
-    
-     
+
         
     </style>
 </head>
 <body>
+
+    
     <div class="sun"></div>
     <div class="clock" id="liveClock"></div>
     <div class="tower tower1">
@@ -464,46 +459,85 @@
     <div class="cloud"></div>
     <div class="cloud"></div>
 
-    
+    <div class="balloon" onclick="showLogin()">Push</div>
 
-    <a href="#login-overlay" class="balloon">Push</a>
-    <div id="login-overlay" class="login-container">
+
+    <div class="login-container" id="login-container">
         <h2>Login</h2>
         <form id="loginForm">
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username" required><br>
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br><br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
-    <script>
-        function updateClock() {
-            const clockElement = document.getElementById("liveClock");
-            if (clockElement) {
-                const now = new Date();
-                clockElement.textContent = now.toLocaleTimeString();
-            }
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
 
-        document.addEventListener("keydown", (event) => {
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+
+            <input type="submit" value="Login">
+        </form>
+        <p id="error-message" class="error-message"></p>
+    </div>
+
+    <div class="balloon" onclick="toggleLogin()">Push</div>
+
+    <div class="login-container" id="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+
+            <input type="submit" value="Login">
+        </form>
+        <p id="error-message" class="error-message"></p>
+    </div>
+
+    <script>
+        
+        function toggleLogin() {
+            const loginContainer = document.getElementById("login-container");
+            loginContainer.style.display = 
+                (loginContainer.style.display === "block") ? "none" : "block";
+        }
+
+        
+        document.addEventListener("keydown", function(event) {
             if (event.key.toLowerCase() === "h") {
-                const loginOverlay = document.getElementById("login-overlay");
-                loginOverlay.style.display = loginOverlay.style.display === "none" ? "block" : "none";
+                toggleLogin();
             }
         });
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-        event.preventDefault(); 
-        let username = document.getElementById("username").value;
-        let password = document.getElementById("password").value;
-        
-        console.log("Login - User name:", username, "passwordd:", password);
 
-        
-        this.reset(); 
-    });
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const errorMessage = document.getElementById("error-message");
+
+            if (username === "admin" && password === "admin") {
+                alert("Login Successful!");
+                window.location.href = "table.html"; 
+            } else {
+                errorMessage.textContent = "Invalid username or password. Please try again.";
+            }
+
+            this.reset(); 
+        });
+
+        function updateClock() {
+        const clockElement = document.getElementById('liveClock');
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateClock, 1000);  
+    updateClock();  
+
     </script>
+
+    
 </body>
 </html>
