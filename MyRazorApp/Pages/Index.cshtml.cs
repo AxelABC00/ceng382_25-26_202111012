@@ -12,51 +12,43 @@ namespace MyRazorApp.Pages
         public static int _idCounter = 1;
 
         [BindProperty]
-        public ClassInformationModel NewClass { get; set; } = new ClassInformationModel();
-
-        [BindProperty]
-        public int EditId { get; set; }
+        public ClassInformationModel NewClass { get; set; } = new();
 
         public void OnGet()
         {
-            if (!ClassList.Any())
+        }
+
+        public IActionResult OnPostSave()
+        {
+            if (!ModelState.IsValid)
+                return Page();
+
+            if (NewClass.Id == 0)
             {
+                
+                NewClass.Id = _idCounter++;
                 ClassList.Add(new ClassInformationModel
                 {
-                    Id = _idCounter++,
-                    ClassName = "Computer Science 101",
-                    StudentCount = 30,
-                    Description = "Introduction to Computer Science"
+                    Id = NewClass.Id,
+                    ClassName = NewClass.ClassName,
+                    StudentCount = NewClass.StudentCount,
+                    Description = NewClass.Description
                 });
             }
-        }
-
-        public ClassInformationModel GetNewClass()
-        {
-            return NewClass;
-        }
-
-        public IActionResult OnPostAdd(ClassInformationModel newClass)
-        {
-            if (NewClass == null || !ModelState.IsValid)
+            else
             {
-                return Page();
+                
+                var existing = ClassList.FirstOrDefault(c => c.Id == NewClass.Id);
+                if (existing != null)
+                {
+                    existing.ClassName = NewClass.ClassName;
+                    existing.StudentCount = NewClass.StudentCount;
+                    existing.Description = NewClass.Description;
+                }
             }
 
-            newClass.Id = _idCounter++;
-            ClassList.Add(NewClass);
-
-            return RedirectToPage();
-        }
-
-        public IActionResult OnPostDelete(int id)
-        {
-            var classToDelete = ClassList.FirstOrDefault(c => c.Id == id);
-            if (classToDelete != null)
-            {
-                ClassList.Remove(classToDelete);
-            }
-
+            
+            NewClass = new ClassInformationModel();
             return RedirectToPage();
         }
 
@@ -77,14 +69,12 @@ namespace MyRazorApp.Pages
             return Page();
         }
 
-        public IActionResult OnPostUpdate()
+        public IActionResult OnPostDelete(int id)
         {
-            var existingClass = ClassList.FirstOrDefault(c => c.Id == NewClass.Id);
-            if (existingClass != null)
+            var classToDelete = ClassList.FirstOrDefault(c => c.Id == id);
+            if (classToDelete != null)
             {
-                existingClass.ClassName = NewClass.ClassName;
-                existingClass.StudentCount = NewClass.StudentCount;
-                existingClass.Description = NewClass.Description;
+                ClassList.Remove(classToDelete);
             }
 
             return RedirectToPage();
