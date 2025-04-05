@@ -1,9 +1,8 @@
 ﻿@page
-@model MyRazorApp.Pages.IndexModel
+@model IndexModel
 @{
     ViewData["Title"] = "Class Management";
 }
-
 
 <style>
     body {
@@ -11,14 +10,13 @@
         font-family: 'Segoe UI', sans-serif;
     }
 
-    .custom-card {
-        background-color: #ffffff;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    .card {
         border-radius: 20px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s ease-in-out;
     }
 
-    .custom-card:hover {
+    .card:hover {
         transform: scale(1.01);
     }
 
@@ -70,99 +68,130 @@
     .table td, .table th {
         vertical-align: middle;
     }
+
+    .pagination .page-link {
+        border-radius: 10px;
+    }
 </style>
 
-<div class="container py-5">
-    <div class="row g-4">
-        
-        <div class="col-md-4">
-            <div class="card custom-card">
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">🎓 Class Management System 🎓</h2>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
                 <div class="card-header bg-gradient text-white text-center" style="background: linear-gradient(to right, #00cec9, #0984e3);">
-                    <h3 class="m-0">@((Model.NewClass.Id == 0) ? "Add New Class" : "Edit Class")</h3>
+                    <h5 class="mb-0">@((Model.NewClass.Id == 0) ? "➕ Add New Class" : "✏️ Update Class")</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-page-handler="Save">
-                        <input type="hidden" asp-for="NewClass.Id" />
-
-                        <div class="mb-3">
-                            <label class="form-label">📘 Class Name</label>
-                            <input type="text" class="form-control" asp-for="NewClass.ClassName" placeholder="e.g. Math 101" />
+                    <form method="post">
+                        <div class="form-group mb-3">
+                            <label for="ClassName" class="form-label">📘 Class Name</label>
+                            <input type="text" class="form-control" asp-for="NewClass.ClassName" id="ClassName" placeholder="Enter class name" />
                             <span asp-validation-for="NewClass.ClassName" class="text-danger"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">👥 Student Count</label>
-                            <input type="number" class="form-control" asp-for="NewClass.StudentCount" placeholder="e.g. 30" />
+                        <div class="form-group mb-3">
+                            <label for="StudentCount" class="form-label">👥 Student Count</label>
+                            <input type="number" class="form-control" asp-for="NewClass.StudentCount" id="StudentCount" placeholder="Enter student count" />
                             <span asp-validation-for="NewClass.StudentCount" class="text-danger"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">📝 Description</label>
-                            <textarea class="form-control" asp-for="NewClass.Description" placeholder="Short description..."></textarea>
+                        <div class="form-group mb-3">
+                            <label for="Description" class="form-label">📝 Description</label>
+                            <textarea class="form-control" asp-for="NewClass.Description" id="Description" rows="3" placeholder="Enter description"></textarea>
                             <span asp-validation-for="NewClass.Description" class="text-danger"></span>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 fs-5">
-                            @(Model.NewClass.Id == 0 ? "➕ Add Class" : "💾 Update Class")
+                        <input type="hidden" asp-for="NewClass.Id" />
+
+                        <button type="submit" asp-page-handler="@((Model.NewClass.Id == 0) ? "Add" : "Update")" class="btn btn-primary w-100 mt-3 fs-5">
+                            @((Model.NewClass.Id == 0) ? "➕ Add Class" : "💾 Update Class")
                         </button>
                     </form>
                 </div>
             </div>
         </div>
 
-        
         <div class="col-md-8">
-            <div class="card custom-card">
+            <div class="card">
                 <div class="card-header bg-dark text-white text-center">
-                    <h3 class="m-0">📋 Class List</h3>
+                    <h5 class="mb-0">📋 Class List</h5>
                 </div>
                 <div class="card-body">
-                    @if (MyRazorApp.Pages.IndexModel.ClassList.Any())
-                    {
-                        <table class="table table-hover table-striped align-middle text-center">
+
+                    <!-- Filtering Form -->
+                    <form method="get" class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="filterClassName" value="@Model.FilterClassName" placeholder="🔍 Filter by class name" />
+                            </div>
+                            <div class="col-md-5">
+                                <input type="number" class="form-control" name="filterStudentCount" value="@Model.FilterStudentCount" placeholder="🔎 Filter by student count" />
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered text-center align-middle">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Class Name</th>
-                                    <th>Student Count</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
+                                    <th>📘 Class Name</th>
+                                    <th>👥 Students</th>
+                                    <th>📝 Description</th>
+                                    <th>⚙️ Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in MyRazorApp.Pages.IndexModel.ClassList)
+                                @if (Model.FilteredClasses.Any())
+                                {
+                                    @foreach (var item in Model.FilteredClasses)
+                                    {
+                                        <tr>
+                                            <td class="text-start">@item.ClassName</td>
+                                            <td>@item.StudentCount</td>
+                                            <td class="text-start">@item.Description</td>
+                                            <td>
+                                                <form method="post" class="d-inline">
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                                    <button type="submit" asp-page-handler="Edit" class="btn btn-warning btn-sm" title="Edit">
+                                                        ✏️
+                                                    </button>
+                                                    <button type="submit" asp-page-handler="Delete" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm('Are you sure you want to delete this class?');">
+                                                        ❌
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>@item.Id</td>
-                                        <td class="text-start">@item.ClassName</td>
-                                        <td>@item.StudentCount</td>
-                                        <td class="text-start">@item.Description</td>
-                                        <td>
-                                            <form method="post" class="d-inline">
-                                                <input type="hidden" name="id" value="@item.Id" />
-                                                <button type="submit" asp-page-handler="Edit" class="btn btn-warning btn-sm">
-                                                    ✏️
-                                                </button>
-                                                <button type="submit" asp-page-handler="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this class?');">
-                                                    ❌
-                                                </button>
-                                            </form>
-                                        </td>
+                                        <td colspan="4" class="text-center">🚫 No classes found.</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-                    }
-                    else
-                    {
-                        <div class="alert alert-info text-center">
-                            No classes available. Add one from the form!
-                        </div>
-                    }
+                    </div>
+
+                    
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-filterClassName="@Model.FilterClassName" asp-route-filterStudentCount="@Model.FilterStudentCount">⬅️ Previous</a>
+                            </li>
+                            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-filterClassName="@Model.FilterClassName" asp-route-filterStudentCount="@Model.FilterStudentCount">Next ➡️</a>
+                            </li>
+                        </ul>
+                    </nav>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<partial name="_ValidationScriptsPartial" />

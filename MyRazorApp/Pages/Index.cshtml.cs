@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using MyRazorApp.Models;
-
+#nullable disable
 namespace MyRazorApp.Pages
 {
     public class IndexModel : PageModel
@@ -12,20 +12,75 @@ namespace MyRazorApp.Pages
         public static int _idCounter = 1;
 
         [BindProperty]
-        public ClassInformationModel NewClass { get; set; } = new();
+        public ClassInformationModel NewClass { get; set; } = new ClassInformationModel();
+
+        [BindProperty(SupportsGet = true)]
+        public string FilterClassName { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int? FilterStudentCount { get; set; }
+
+        public List<ClassInformationModel> FilteredClasses { get; set; } = new();
+
+        [BindProperty(SupportsGet = true)]
+        public int PageNumber { get; set; } = 1;
+
+        public int PageSize { get; set; } = 10;
+        public int TotalPages { get; set; }
 
         public void OnGet()
         {
+            if (ClassList.Count == 0)
+            {
+                GenerateDummyData();
+            }
+
+            var query = ClassList.AsQueryable();
+
+            if (!string.IsNullOrEmpty(FilterClassName))
+            {
+                query = query.Where(c => c.ClassName.Contains(FilterClassName));
+            }
+
+            if (FilterStudentCount.HasValue)
+            {
+                query = query.Where(c => c.StudentCount == FilterStudentCount.Value);
+            }
+
+            TotalPages = (int)System.Math.Ceiling(query.Count() / (double)PageSize);
+
+            FilteredClasses = query
+                .Skip((PageNumber - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
         }
 
-        public IActionResult OnPostSave()
+        private void GenerateDummyData()
         {
-            if (!ModelState.IsValid)
-                return Page();
+            var random = new Random();
+            string[] classNames = { "Math", "Science", "History", "Physics", "Chemistry", "Biology", "Music", "Art", "Computer Science", "English" };
 
-            if (NewClass.Id == 0)
+            for (int i = 1; i <= 100; i++)
             {
-                
+                ClassList.Add(new ClassInformationModel
+                {
+                    Id = _idCounter++,
+                    ClassName = classNames[random.Next(classNames.Length)] + $" {i}",
+                    StudentCount = random.Next(10, 51), 
+                    Description = $"This is a description for class {i}."
+                });
+            }
+        }
+
+        public IActionResult OnPostAdd()
+        {
+            if (NewClass == null || !ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            if (NewClass.Id == 0) 
+            {
                 NewClass.Id = _idCounter++;
                 ClassList.Add(new ClassInformationModel
                 {
@@ -35,20 +90,29 @@ namespace MyRazorApp.Pages
                     Description = NewClass.Description
                 });
             }
-            else
+            else 
             {
-                
-                var existing = ClassList.FirstOrDefault(c => c.Id == NewClass.Id);
-                if (existing != null)
+                var existingClass = ClassList.FirstOrDefault(c => c.Id == NewClass.Id);
+                if (existingClass != null)
                 {
-                    existing.ClassName = NewClass.ClassName;
-                    existing.StudentCount = NewClass.StudentCount;
-                    existing.Description = NewClass.Description;
+                    existingClass.ClassName = NewClass.ClassName;
+                    existingClass.StudentCount = NewClass.StudentCount;
+                    existingClass.Description = NewClass.Description;
                 }
             }
 
-            
             NewClass = new ClassInformationModel();
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostDelete(int id)
+        {
+            var classToDelete = ClassList.FirstOrDefault(c => c.Id == id);
+            if (classToDelete != null)
+            {
+                ClassList.Remove(classToDelete);
+            }
+
             return RedirectToPage();
         }
 
@@ -69,15 +133,17 @@ namespace MyRazorApp.Pages
             return Page();
         }
 
-        public IActionResult OnPostDelete(int id)
+        public IActionResult OnPostUpdate()
         {
-            var classToDelete = ClassList.FirstOrDefault(c => c.Id == id);
-            if (classToDelete != null)
+            var existingClass = ClassList.FirstOrDefault(c => c.Id == NewClass.Id);
+            if (existingClass != null)
             {
-                ClassList.Remove(classToDelete);
+                existingClass.ClassName = NewClass.ClassName;
+                existingClass.StudentCount = NewClass.StudentCount;
+                existingClass.Description = NewClass.Description;
             }
 
             return RedirectToPage();
-        }
-    }
+ }
+}
 }
