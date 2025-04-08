@@ -123,14 +123,11 @@
                     <!-- Filtering Form -->
                     <form method="get" class="mb-3">
                         <div class="row g-2">
-                            <div class="col-md-5">
-                                <input type="text" class="form-control" name="filterClassName" value="@Model.FilterClassName" placeholder="🔍 Filter by class name" />
-                            </div>
-                            <div class="col-md-5">
-                                <input type="number" class="form-control" name="filterStudentCount" value="@Model.FilterStudentCount" placeholder="🔎 Filter by student count" />
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="SearchTerm" value="@Model.SearchTerm" placeholder="🔍 Search class name, student count, or description" />
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100">Filter</button>
+                                <button type="submit" class="btn btn-primary w-100">Search</button>
                             </div>
                         </div>
                     </form>
@@ -178,14 +175,13 @@
                         </table>
                     </div>
 
-                    
                     <nav>
                         <ul class="pagination justify-content-center">
                             <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
-                                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-filterClassName="@Model.FilterClassName" asp-route-filterStudentCount="@Model.FilterStudentCount">⬅️ Previous</a>
+                                <a class="page-link" asp-page="./Index" asp-route-PageNumber="@(Model.PageNumber - 1)" asp-route-SearchTerm="@Model.SearchTerm">⬅️ Previous</a>
                             </li>
                             <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
-                                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-filterClassName="@Model.FilterClassName" asp-route-filterStudentCount="@Model.FilterStudentCount">Next ➡️</a>
+                                <a class="page-link" asp-page="./Index" asp-route-PageNumber="@(Model.PageNumber + 1)" asp-route-SearchTerm="@Model.SearchTerm">Next ➡️</a>
                             </li>
                         </ul>
                     </nav>

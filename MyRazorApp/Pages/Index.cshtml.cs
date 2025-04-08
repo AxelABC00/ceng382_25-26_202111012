@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyRazorApp.Models;
 #nullable disable
+
 namespace MyRazorApp.Pages
 {
     public class IndexModel : PageModel
@@ -15,10 +16,7 @@ namespace MyRazorApp.Pages
         public ClassInformationModel NewClass { get; set; } = new ClassInformationModel();
 
         [BindProperty(SupportsGet = true)]
-        public string FilterClassName { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public int? FilterStudentCount { get; set; }
+        public string SearchTerm { get; set; }
 
         public List<ClassInformationModel> FilteredClasses { get; set; } = new();
 
@@ -37,14 +35,13 @@ namespace MyRazorApp.Pages
 
             var query = ClassList.AsQueryable();
 
-            if (!string.IsNullOrEmpty(FilterClassName))
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
             {
-                query = query.Where(c => c.ClassName.Contains(FilterClassName));
-            }
-
-            if (FilterStudentCount.HasValue)
-            {
-                query = query.Where(c => c.StudentCount == FilterStudentCount.Value);
+                var lowerSearch = SearchTerm.ToLower();
+                query = query.Where(c =>
+                    (!string.IsNullOrEmpty(c.ClassName) && c.ClassName.ToLower().Contains(lowerSearch)) ||
+                    (!string.IsNullOrEmpty(c.Description) && c.Description.ToLower().Contains(lowerSearch)) ||
+                    c.StudentCount.ToString().Contains(lowerSearch));
             }
 
             TotalPages = (int)System.Math.Ceiling(query.Count() / (double)PageSize);
@@ -66,7 +63,7 @@ namespace MyRazorApp.Pages
                 {
                     Id = _idCounter++,
                     ClassName = classNames[random.Next(classNames.Length)] + $" {i}",
-                    StudentCount = random.Next(10, 51), 
+                    StudentCount = random.Next(10, 51),
                     Description = $"This is a description for class {i}."
                 });
             }
@@ -79,7 +76,7 @@ namespace MyRazorApp.Pages
                 return Page();
             }
 
-            if (NewClass.Id == 0) 
+            if (NewClass.Id == 0)
             {
                 NewClass.Id = _idCounter++;
                 ClassList.Add(new ClassInformationModel
@@ -90,7 +87,7 @@ namespace MyRazorApp.Pages
                     Description = NewClass.Description
                 });
             }
-            else 
+            else
             {
                 var existingClass = ClassList.FirstOrDefault(c => c.Id == NewClass.Id);
                 if (existingClass != null)
@@ -144,6 +141,6 @@ namespace MyRazorApp.Pages
             }
 
             return RedirectToPage();
- }
-}
+        }
+    }
 }
