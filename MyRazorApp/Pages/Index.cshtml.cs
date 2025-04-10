@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MyRazorApp.Models;
+using MyRazorApp.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using MyRazorApp.Models;
-#nullable disable
+using System;
 
 namespace MyRazorApp.Pages
 {
@@ -16,7 +17,7 @@ namespace MyRazorApp.Pages
         public ClassInformationModel NewClass { get; set; } = new ClassInformationModel();
 
         [BindProperty(SupportsGet = true)]
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; }
 
         public List<ClassInformationModel> FilteredClasses { get; set; } = new();
 
@@ -25,6 +26,9 @@ namespace MyRazorApp.Pages
 
         public int PageSize { get; set; } = 10;
         public int TotalPages { get; set; }
+
+        [BindProperty]
+        public string? selectedColumns { get; set; }
 
         public void OnGet()
         {
@@ -44,7 +48,7 @@ namespace MyRazorApp.Pages
                     c.StudentCount.ToString().Contains(lowerSearch));
             }
 
-            TotalPages = (int)System.Math.Ceiling(query.Count() / (double)PageSize);
+            TotalPages = (int)Math.Ceiling(query.Count() / (double)PageSize);
 
             FilteredClasses = query
                 .Skip((PageNumber - 1) * PageSize)
@@ -141,6 +145,32 @@ namespace MyRazorApp.Pages
             }
 
             return RedirectToPage();
+        }
+
+        public IActionResult OnPostExportJson(bool isFiltered)
+        {
+            var dataToExport = isFiltered ? FilteredClasses : ClassList;
+
+            var columnIndexes = new List<int>();
+            if (!string.IsNullOrWhiteSpace(selectedColumns))
+            {
+                columnIndexes = selectedColumns.Split(',').Select(int.Parse).ToList();
+            }
+
+            var reducedData = dataToExport.Select(item =>
+            {
+                var dict = new Dictionary<string, object>();
+                if (columnIndexes.Count == 0 || columnIndexes.Contains(0)) dict["ClassName"] = item.ClassName;
+                if (columnIndexes.Count == 0 || columnIndexes.Contains(1)) dict["StudentCount"] = item.StudentCount;
+                if (columnIndexes.Count == 0 || columnIndexes.Contains(2)) dict["Description"] = item.Description;
+                return dict;
+            });
+
+            var json = JsonExportUtils.Instance.SerializeToJson(reducedData);
+
+            var fileName = isFiltered ? "filtered_classes.json" : "all_classes.json";
+            var fileBytes = System.Text.Encoding.UTF8.GetBytes(json);
+            return File(fileBytes, "application/json", fileName);
         }
     }
 }
