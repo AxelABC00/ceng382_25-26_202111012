@@ -166,15 +166,14 @@
                     </form>
 
                     <form method="post" asp-page-handler="ExportJson">
-                        <input type="hidden" name="isFiltered" value="true" />
-                        <input type="hidden" id="SelectedColumnsInput" name="selectedColumns" />
-                    </form>
+    <input type="hidden" name="isFiltered" value="true" />
+    <input type="hidden" id="SelectedColumnsInput" name="selectedColumns" />
+    <input type="hidden" name="SearchTerm" value="@Model.SearchTerm" />
+    <input type="hidden" name="PageNumber" value="@Model.PageNumber" />
+    <button type="submit" class="btn btn-secondary mb-3">⬇️ Export JSON</button>
+</form>
 
-                    <form method="post" asp-page-handler="ExportJson">
-                        <input type="hidden" name="isFiltered" value="false" />
-                        <input type="hidden" id="SelectedColumnsInputAll" name="selectedColumns" />
-                        <button type="submit" class="btn btn-secondary mb-3">⬇️ Export JSON</button>
-                    </form>
+                   
 
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered text-center align-middle">
@@ -239,19 +238,23 @@
     function updateSelectedColumnsInput() {
         const selected = Array.from(selectedColumns).sort().join(",");
         document.getElementById("SelectedColumnsInput").value = selected;
-        document.getElementById("SelectedColumnsInputAll").value = selected;
     }
 
     document.querySelectorAll(".clickable-header").forEach(header => {
         header.addEventListener("click", () => {
             const index = header.getAttribute("data-index");
+            const columnCells = document.querySelectorAll(`td:nth-child(${parseInt(index) + 1}), th:nth-child(${parseInt(index) + 1})`);
+
             if (selectedColumns.has(index)) {
                 selectedColumns.delete(index);
                 header.classList.remove("table-success");
+                columnCells.forEach(cell => cell.classList.remove("table-success"));
             } else {
                 selectedColumns.add(index);
                 header.classList.add("table-success");
+                columnCells.forEach(cell => cell.classList.add("table-success"));
             }
+
             updateSelectedColumnsInput();
         });
     });

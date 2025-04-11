@@ -19,13 +19,14 @@ namespace MyRazorApp.Pages
         [BindProperty(SupportsGet = true)]
         public string? SearchTerm { get; set; }
 
-        public List<ClassInformationModel> FilteredClasses { get; set; } = new();
-
         [BindProperty(SupportsGet = true)]
+       
         public int PageNumber { get; set; } = 1;
 
         public int PageSize { get; set; } = 10;
         public int TotalPages { get; set; }
+
+        public List<ClassInformationModel> FilteredClasses { get; set; } = new();
 
         [BindProperty]
         public string? selectedColumns { get; set; }
@@ -149,25 +150,56 @@ namespace MyRazorApp.Pages
 
         public IActionResult OnPostExportJson(bool isFiltered)
         {
-            var dataToExport = isFiltered ? FilteredClasses : ClassList;
-
             var columnIndexes = new List<int>();
             if (!string.IsNullOrWhiteSpace(selectedColumns))
             {
-                columnIndexes = selectedColumns.Split(',').Select(int.Parse).ToList();
+                columnIndexes = selectedColumns
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Where(x => int.TryParse(x, out _))
+                    .Select(int.Parse)
+                    .ToList();
             }
 
-            var reducedData = dataToExport.Select(item =>
+            List<ClassInformationModel> dataToExport;
+
+            if (isFiltered)
             {
-                var dict = new Dictionary<string, object>();
-                if (columnIndexes.Count == 0 || columnIndexes.Contains(0)) dict["ClassName"] = item.ClassName;
-                if (columnIndexes.Count == 0 || columnIndexes.Contains(1)) dict["StudentCount"] = item.StudentCount;
-                if (columnIndexes.Count == 0 || columnIndexes.Contains(2)) dict["Description"] = item.Description;
-                return dict;
-            });
+                var query = ClassList.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(SearchTerm))
+                {
+                    var lowerSearch = SearchTerm.ToLower();
+                    query = query.Where(c =>
+                        (!string.IsNullOrEmpty(c.ClassName) && c.ClassName.ToLower().Contains(lowerSearch)) ||
+                        (!string.IsNullOrEmpty(c.Description) && c.Description.ToLower().Contains(lowerSearch)) ||
+                        c.StudentCount.ToString().Contains(lowerSearch));
+                }
+
+                dataToExport = query
+                    .Skip((PageNumber - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToList();
+            }
+            else
+            {
+                dataToExport = ClassList;
+            }
+
+           var reducedData = dataToExport
+    .Where(item => item != null)
+    .Select(item =>
+    {
+        var dict = new Dictionary<string, object>();
+        if (columnIndexes.Count == 0 || columnIndexes.Contains(0))
+            dict["ClassName"] = item.ClassName;
+        if (columnIndexes.Count == 0 || columnIndexes.Contains(1))
+            dict["StudentCount"] = item.StudentCount;
+        if (columnIndexes.Count == 0 || columnIndexes.Contains(2))
+            dict["Description"] = item.Description;
+        return dict;
+    }).ToList();
 
             var json = JsonExportUtils.Instance.SerializeToJson(reducedData);
-
             var fileName = isFiltered ? "filtered_classes.json" : "all_classes.json";
             var fileBytes = System.Text.Encoding.UTF8.GetBytes(json);
             return File(fileBytes, "application/json", fileName);
