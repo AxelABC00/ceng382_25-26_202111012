@@ -1,0 +1,32 @@
+@page
+@model MyRazorApp.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5" style="max-width: 500px;">
+    <div class="card shadow-sm">
+        <div class="card-header text-white text-center" style="background: linear-gradient(to right, #00cec9, #0984e3);">
+            <h3>🔐 Login</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label">👤 Username</label>
+                    <input type="text" class="form-control" asp-for="Username" placeholder="Enter your username" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">🔑 Password</label>
+                    <input type="password" class="form-control" asp-for="Password" placeholder="Enter your password" required />
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger">@Model.ErrorMessage</div>
+                }
+
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+        </div>
+    </div>
+</div>

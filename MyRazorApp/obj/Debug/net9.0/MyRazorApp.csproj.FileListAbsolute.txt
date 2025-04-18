@@ -96,3 +96,4 @@ C:\Users\ABC\Desktop\tmp\ceng382_25-26_202111012\MyRazorApp\obj\Debug\net9.0\ref
 C:\Users\ABC\Desktop\tmp\ceng382_25-26_202111012\MyRazorApp\obj\Debug\net9.0\MyRazorApp.pdb
 C:\Users\ABC\Desktop\tmp\ceng382_25-26_202111012\MyRazorApp\obj\Debug\net9.0\MyRazorApp.genruntimeconfig.cache
 C:\Users\ABC\Desktop\tmp\ceng382_25-26_202111012\MyRazorApp\obj\Debug\net9.0\ref\MyRazorApp.dll
+C:\Users\ABC\Desktop\tmp\ceng382_25-26_202111012\MyRazorApp\obj\Debug\net9.0\compressed\khtmvtm95k-5r6pnf8w58.gz

@@ -1,5 +1,7 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Http;
 using MyRazorApp.Models;
 using MyRazorApp.Helpers;
 using System.Collections.Generic;
@@ -20,7 +22,6 @@ namespace MyRazorApp.Pages
         public string? SearchTerm { get; set; }
 
         [BindProperty(SupportsGet = true)]
-       
         public int PageNumber { get; set; } = 1;
 
         public int PageSize { get; set; } = 10;
@@ -31,13 +32,20 @@ namespace MyRazorApp.Pages
         [BindProperty]
         public string? selectedColumns { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            if (ClassList.Count == 0)
-            {
-                GenerateDummyData();
-            }
+            if (!IsAuthenticated())
+                return RedirectToPage("/Login");
 
+            if (ClassList.Count == 0)
+                GenerateDummyData();
+
+            ApplyFilteringAndPaging();
+            return Page();
+        }
+
+        private void ApplyFilteringAndPaging()
+        {
             var query = ClassList.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(SearchTerm))
@@ -76,10 +84,10 @@ namespace MyRazorApp.Pages
 
         public IActionResult OnPostAdd()
         {
+            if (!IsAuthenticated()) return RedirectToPage("/Login");
+
             if (NewClass == null || !ModelState.IsValid)
-            {
                 return Page();
-            }
 
             if (NewClass.Id == 0)
             {
@@ -109,6 +117,8 @@ namespace MyRazorApp.Pages
 
         public IActionResult OnPostDelete(int id)
         {
+            if (!IsAuthenticated()) return RedirectToPage("/Login");
+
             var classToDelete = ClassList.FirstOrDefault(c => c.Id == id);
             if (classToDelete != null)
             {
@@ -120,6 +130,8 @@ namespace MyRazorApp.Pages
 
         public IActionResult OnPostEdit(int id)
         {
+            if (!IsAuthenticated()) return RedirectToPage("/Login");
+
             var classToEdit = ClassList.FirstOrDefault(c => c.Id == id);
             if (classToEdit != null)
             {
@@ -132,11 +144,14 @@ namespace MyRazorApp.Pages
                 };
             }
 
+            ApplyFilteringAndPaging();
             return Page();
         }
 
         public IActionResult OnPostUpdate()
         {
+            if (!IsAuthenticated()) return RedirectToPage("/Login");
+
             var existingClass = ClassList.FirstOrDefault(c => c.Id == NewClass.Id);
             if (existingClass != null)
             {
@@ -150,6 +165,8 @@ namespace MyRazorApp.Pages
 
         public IActionResult OnPostExportJson(bool isFiltered)
         {
+            if (!IsAuthenticated()) return RedirectToPage("/Login");
+
             var columnIndexes = new List<int>();
             if (!string.IsNullOrWhiteSpace(selectedColumns))
             {
@@ -185,24 +202,49 @@ namespace MyRazorApp.Pages
                 dataToExport = ClassList;
             }
 
-           var reducedData = dataToExport
-    .Where(item => item != null)
-    .Select(item =>
-    {
-        var dict = new Dictionary<string, object>();
-        if (columnIndexes.Count == 0 || columnIndexes.Contains(0))
-            dict["ClassName"] = item.ClassName;
-        if (columnIndexes.Count == 0 || columnIndexes.Contains(1))
-            dict["StudentCount"] = item.StudentCount;
-        if (columnIndexes.Count == 0 || columnIndexes.Contains(2))
-            dict["Description"] = item.Description;
-        return dict;
-    }).ToList();
+            var reducedData = dataToExport
+                .Where(item => item != null)
+                .Select(item =>
+                {
+                    var dict = new Dictionary<string, object>();
+                    if (columnIndexes.Count == 0 || columnIndexes.Contains(0))
+                        dict["ClassName"] = item.ClassName;
+                    if (columnIndexes.Count == 0 || columnIndexes.Contains(1))
+                        dict["StudentCount"] = item.StudentCount;
+                    if (columnIndexes.Count == 0 || columnIndexes.Contains(2))
+                        dict["Description"] = item.Description;
+                    return dict;
+                }).ToList();
 
             var json = JsonExportUtils.Instance.SerializeToJson(reducedData);
             var fileName = isFiltered ? "filtered_classes.json" : "all_classes.json";
             var fileBytes = System.Text.Encoding.UTF8.GetBytes(json);
             return File(fileBytes, "application/json", fileName);
+        }
+
+        public IActionResult OnPostLogout()
+        {
+            
+            Response.Cookies.Delete("username");
+            Response.Cookies.Delete("token");
+            Response.Cookies.Delete("session_id");
+
+            HttpContext.Session.Clear();
+
+            return RedirectToPage("/Login");
+        }
+
+        private bool IsAuthenticated()
+        {
+            var sessionUsername = HttpContext.Session.GetString("username");
+            var sessionToken = HttpContext.Session.GetString("token");
+            var sessionId = HttpContext.Session.GetString("session_id");
+
+            var cookieUsername = Request.Cookies["username"];
+            var cookieToken = Request.Cookies["token"];
+            var cookieSessionId = Request.Cookies["session_id"];
+
+            return sessionUsername == cookieUsername && sessionToken == cookieToken && sessionId == cookieSessionId;
         }
     }
 }
