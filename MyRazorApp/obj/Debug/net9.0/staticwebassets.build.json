@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "7OyW1AVuwKqJHiTQ4MP8P5h5ungIfdmxD8tHn4FRcIU=",
+  "Hash": "TCwDlW+WjgEcpDTFKy8ff76k0Wxgvo6SwFkihcwQB9w=",
   "Source": "MyRazorApp",
   "BasePath": "_content/MyRazorApp",
   "Mode": "Default",
@@ -1443,6 +1443,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\ABC\\Desktop\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\wwwroot\\data\\SchoolDbContext.cs",
+      "SourceId": "MyRazorApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ABC\\Desktop\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\wwwroot\\",
+      "BasePath": "_content/MyRazorApp",
+      "RelativePath": "data/SchoolDbContext#[.{fingerprint}]?.cs",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "swv8k8fc4i",
+      "Integrity": "jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\data\\SchoolDbContext.cs"
     },
     {
       "Identity": "C:\\Users\\ABC\\Desktop\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\wwwroot\\data\\users.json",
@@ -3064,6 +3085,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-0FC1RbVkLkwKhJ1oi+r2Hw4Tm9av6DyJeo95YVvfA3Y="
+        }
+      ]
+    },
+    {
+      "Route": "data/SchoolDbContext.cs",
+      "AssetFile": "C:\\Users\\ABC\\Desktop\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\wwwroot\\data\\SchoolDbContext.cs",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "365"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 01 May 2025 08:17:26 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s="
+        }
+      ]
+    },
+    {
+      "Route": "data/SchoolDbContext.swv8k8fc4i.cs",
+      "AssetFile": "C:\\Users\\ABC\\Desktop\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\wwwroot\\data\\SchoolDbContext.cs",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "365"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 01 May 2025 08:17:26 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "swv8k8fc4i"
+        },
+        {
+          "Name": "label",
+          "Value": "data/SchoolDbContext.cs"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s="
         }
       ]
     },

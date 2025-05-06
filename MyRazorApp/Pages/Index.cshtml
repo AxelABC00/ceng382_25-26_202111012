@@ -1,6 +1,5 @@
-﻿
-@page
-@model IndexModel
+﻿@page
+@model MyRazorApp.Pages.Classes.IndexModel
 @{
     ViewData["Title"] = "Class Management";
 }
@@ -13,119 +12,11 @@
     return;
 }
 
-<style>
-    body {
-        background: linear-gradient(to right, #e3f2fd, #f1f8e9);
-        font-family: 'Segoe UI', sans-serif;
-    }
-
-    .card {
-        border-radius: 20px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease-in-out;
-    }
-
-    .card:hover {
-        transform: scale(1.01);
-    }
-
-    .btn-primary {
-        background-color: #00b894;
-        border: none;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background-color: #00a383;
-    }
-
-    .btn-warning {
-        background-color: #fdcb6e;
-        border: none;
-        color: #333;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-warning:hover {
-        background-color: #faae43;
-    }
-
-    .btn-danger {
-        background-color: #d63031;
-        border: none;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-danger:hover {
-        background-color: #c0392b;
-    }
-
-    .card-header {
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-    }
-
-    .form-label {
-        font-weight: bold;
-        color: #37474f;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f1f1f1;
-    }
-
-    .table td, .table th {
-        vertical-align: middle;
-    }
-
-    .pagination {
-        margin-top: 40px;
-        gap: 20px;
-        justify-content: center;
-    }
-
-    .pagination .page-link {
-        border-radius: 12px;
-        padding: 10px 20px;
-        background-color: #ffffff;
-        border: 1px solid #00b894;
-        color: #00b894;
-        font-weight: bold;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-    }
-
-    .pagination .page-link:hover {
-        background-color: #00b894;
-        color: #ffffff;
-    }
-
-    .pagination .disabled .page-link {
-        background-color: #ccc;
-        color: #666;
-        border: 1px solid #aaa;
-        cursor: not-allowed;
-    }
-
-    .clickable-header {
-        cursor: pointer;
-    }
-
-    .clickable-header.table-success {
-        background-color: #55efc4 !important;
-        color: #2d3436 !important;
-    }
-
-    .logout-bottom-left {
-        margin-top: 10px;
-    }
-</style>
-
 <div class="container mt-5">
-
     <h2 class="text-center mb-4 text-primary">🎓 Class Management System 🎓</h2>
 
     <div class="row">
+        <!-- Add/Update Form -->
         <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-header bg-gradient text-white text-center" style="background: linear-gradient(to right, #00cec9, #0984e3);">
@@ -133,21 +24,21 @@
                 </div>
                 <div class="card-body">
                     <form method="post">
-                        <div class="form-group mb-3 selectable-input" data-index="0">
-                            <label for="ClassName" class="form-label">📘 Class Name</label>
-                            <input type="text" class="form-control" asp-for="NewClass.ClassName" id="ClassName" placeholder="Enter class name" />
+                        <div class="form-group mb-3">
+                            <label asp-for="NewClass.ClassName" class="form-label">📘 Class Name</label>
+                            <input type="text" class="form-control" asp-for="NewClass.ClassName" placeholder="Enter class name" />
                             <span asp-validation-for="NewClass.ClassName" class="text-danger"></span>
                         </div>
 
-                        <div class="form-group mb-3 selectable-input" data-index="1">
-                            <label for="StudentCount" class="form-label">👥 Student Count</label>
-                            <input type="number" class="form-control" asp-for="NewClass.StudentCount" id="StudentCount" placeholder="Enter student count" />
+                        <div class="form-group mb-3">
+                            <label asp-for="NewClass.StudentCount" class="form-label">👥 Student Count</label>
+                            <input type="number" class="form-control" asp-for="NewClass.StudentCount" placeholder="Enter student count" />
                             <span asp-validation-for="NewClass.StudentCount" class="text-danger"></span>
                         </div>
 
-                        <div class="form-group mb-3 selectable-input" data-index="2">
-                            <label for="Description" class="form-label">📝 Description</label>
-                            <textarea class="form-control" asp-for="NewClass.Description" id="Description" rows="3" placeholder="Enter description"></textarea>
+                        <div class="form-group mb-3">
+                            <label asp-for="NewClass.Description" class="form-label">📝 Description</label>
+                            <textarea class="form-control" asp-for="NewClass.Description" rows="3" placeholder="Enter description"></textarea>
                             <span asp-validation-for="NewClass.Description" class="text-danger"></span>
                         </div>
 
@@ -158,7 +49,6 @@
                         </button>
                     </form>
 
-                    
                     <form method="post" asp-page-handler="Logout" class="logout-bottom-left">
                         <button type="submit" class="btn btn-outline-danger w-100 mt-2">🚪 Logout</button>
                     </form>
@@ -166,6 +56,7 @@
             </div>
         </div>
 
+        <!-- Class List Table -->
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header bg-dark text-white text-center">
@@ -240,7 +131,6 @@
                             </li>
                         </ul>
                     </nav>
-
                 </div>
             </div>
         </div>

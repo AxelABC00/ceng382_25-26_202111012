@@ -599,6 +599,88 @@
       ]
     },
     {
+      "Route": "data/SchoolDbContext.cs",
+      "AssetFile": "data/SchoolDbContext.cs",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "365"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 01 May 2025 08:17:26 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s="
+        }
+      ]
+    },
+    {
+      "Route": "data/SchoolDbContext.swv8k8fc4i.cs",
+      "AssetFile": "data/SchoolDbContext.cs",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "365"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 01 May 2025 08:17:26 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "swv8k8fc4i"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-jPfUeydJgK9eQkP/dVy1HuoJPW2jCR9OFSIRfHCvQ3s="
+        },
+        {
+          "Name": "label",
+          "Value": "data/SchoolDbContext.cs"
+        }
+      ]
+    },
+    {
       "Route": "data/users.5r6pnf8w58.json",
       "AssetFile": "data/users.json.gz",
       "Selectors": [
