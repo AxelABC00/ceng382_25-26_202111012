@@ -7679,11 +7679,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ABC\\Desktop\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\MyRazorApp.csproj",
+      "projectUniqueName": "C:\\Users\\ABC\\OneDrive\\Masaüstü\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\MyRazorApp.csproj",
       "projectName": "MyRazorApp",
-      "projectPath": "C:\\Users\\ABC\\Desktop\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\MyRazorApp.csproj",
+      "projectPath": "C:\\Users\\ABC\\OneDrive\\Masaüstü\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\MyRazorApp.csproj",
       "packagesPath": "C:\\Users\\ABC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ABC\\Desktop\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\obj\\",
+      "outputPath": "C:\\Users\\ABC\\OneDrive\\Masaüstü\\tmp\\ceng382_25-26_202111012\\MyRazorApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
